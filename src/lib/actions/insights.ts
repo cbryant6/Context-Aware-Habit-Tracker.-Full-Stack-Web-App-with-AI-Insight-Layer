@@ -2,6 +2,7 @@
 
 import Anthropic from "@anthropic-ai/sdk";
 import { createClient } from "@/lib/supabase/server";
+import { trimLogsForAI } from "@/lib/analytics";
 
 type InsightsResult =
   | { status: "ok"; summary: string }
@@ -58,15 +59,9 @@ export async function generateInsights(
       "and habit completion across the user's data as a whole. " +
       "Keep your response under 200 words. Do not use markdown headers.";
 
-    const trimmed = logs.map((log) => ({
-      habit: (log as { habits: { name: string } }).habits.name,
-      date: log.date,
-      completed: log.completed,
-      sleep_score: log.sleep_score,
-      stress_score: log.stress_score,
-      mood: log.mood,
-      schedule_disrupted: log.schedule_disrupted,
-    }));
+    const trimmed = trimLogsForAI(
+      logs as unknown as Parameters<typeof trimLogsForAI>[0]
+    );
 
     let userMessage: string;
 

@@ -3,6 +3,7 @@
 import { useState } from "react";
 import type { Habit, ContextLog } from "@/lib/types";
 import { ContextLogForm } from "@/components/context-log-form";
+import { findBrokenStreaks } from "@/lib/analytics";
 
 function calculateStreak(
   habitId: string,
@@ -35,37 +36,6 @@ function dateStr(daysAgo: number): string {
   const d = new Date();
   d.setDate(d.getDate() - daysAgo);
   return d.toLocaleDateString("en-CA");
-}
-
-function findBrokenStreaks(
-  habits: Habit[],
-  logs: ContextLog[],
-  today: string,
-  yesterday: string,
-  dayBeforeYesterday: string
-): Habit[] {
-  return habits.filter((habit) => {
-    const habitLogs = logs.filter((l) => l.habit_id === habit.id);
-    const dateMap = new Map<string, boolean>();
-    for (const log of habitLogs) {
-      dateMap.set(log.date, log.completed);
-    }
-
-    const loggedToday = dateMap.has(today);
-    const completedYesterday = dateMap.get(yesterday) === true;
-    const completedDayBefore = dateMap.get(dayBeforeYesterday) === true;
-
-    if (loggedToday || completedYesterday || !completedDayBefore) return false;
-
-    let priorStreak = 0;
-    const cursor = new Date(dayBeforeYesterday + "T00:00:00");
-    while (dateMap.get(cursor.toLocaleDateString("en-CA")) === true) {
-      priorStreak++;
-      cursor.setTime(cursor.getTime() - 86_400_000);
-    }
-
-    return priorStreak >= 2;
-  });
 }
 
 export function TodayChecklist({

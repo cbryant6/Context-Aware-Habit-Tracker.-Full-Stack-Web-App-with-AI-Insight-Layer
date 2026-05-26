@@ -10,28 +10,7 @@ import {
   Cell,
 } from "recharts";
 import type { ContextLog } from "@/lib/types";
-
-function buildChartData(logs: ContextLog[]) {
-  const today = new Date();
-  const data: { date: string; rate: number | null }[] = [];
-
-  for (let i = 29; i >= 0; i--) {
-    const d = new Date(today);
-    d.setDate(today.getDate() - i);
-    const dateStr = d.toLocaleDateString("en-CA"); // YYYY-MM-DD
-    const label = d.toLocaleDateString("en-US", { month: "numeric", day: "numeric" });
-
-    const dayLogs = logs.filter((l) => l.date === dateStr);
-    const rate =
-      dayLogs.length > 0
-        ? Math.round((dayLogs.filter((l) => l.completed).length / dayLogs.length) * 100)
-        : null;
-
-    data.push({ date: label, rate });
-  }
-
-  return data;
-}
+import { buildChartData } from "@/lib/analytics";
 
 export function CompletionRateChart({
   logs,
