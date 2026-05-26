@@ -31,7 +31,7 @@ export default async function HomePage() {
       supabase
         .from("daily_check_ins")
         .select("*")
-        .eq("date", today)
+        .order("date", { ascending: false })
         .limit(1),
     ]);
 

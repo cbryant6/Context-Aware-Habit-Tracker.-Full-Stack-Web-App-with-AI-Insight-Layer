@@ -56,11 +56,14 @@ export function HealthCheckIn({
   const router = useRouter();
   const supabase = createClient();
 
+  const isFromToday = existing?.date === date;
+  const display = existing;
+
   const [values, setValues] = useState<Record<string, string>>({
-    steps: existing?.steps?.toString() ?? "",
-    sleep_hours: existing?.sleep_hours?.toString() ?? "",
-    calories: existing?.calories?.toString() ?? "",
-    water_glasses: existing?.water_glasses?.toString() ?? "",
+    steps: "",
+    sleep_hours: "",
+    calories: "",
+    water_glasses: "",
   });
   const [saving, setSaving] = useState<string | null>(null);
 
@@ -93,11 +96,14 @@ export function HealthCheckIn({
   return (
     <div>
       <h2 className="mb-4 text-sm font-semibold uppercase tracking-wide text-gray-500">
-        Daily Health Check-in
+        {isFromToday || !display ? "Daily Health Check-in" : "Latest Health Check-in"}
       </h2>
       <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
         {FIELDS.map((field) => {
-          const hasValue = existing?.[field.key] != null;
+          const displayValue = display?.[field.key];
+          const hasDisplayValue = displayValue != null;
+          const todayHasValue = isFromToday && hasDisplayValue;
+
           return (
             <div
               key={field.key}
@@ -110,12 +116,12 @@ export function HealthCheckIn({
                 </span>
               </div>
 
-              {hasValue ? (
+              {hasDisplayValue ? (
                 <div className="mt-3">
                   <p className="text-2xl font-bold text-gray-900">
                     {field.key === "sleep_hours"
-                      ? existing[field.key]
-                      : existing[field.key]?.toLocaleString()}
+                      ? displayValue
+                      : displayValue?.toLocaleString()}
                   </p>
                   <p className="text-xs text-gray-400">{field.unit}</p>
                 </div>

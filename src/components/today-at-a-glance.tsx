@@ -30,6 +30,13 @@ function getLongestActiveStreak(
   return best;
 }
 
+function getMostRecentDate(logs: ContextLog[], today: string): string {
+  const todayLogs = logs.filter((l) => l.date === today);
+  if (todayLogs.length > 0) return today;
+  const dates = [...new Set(logs.map((l) => l.date))].sort().reverse();
+  return dates[0] ?? today;
+}
+
 export function TodayAtAGlance({
   habits,
   logs,
@@ -38,16 +45,18 @@ export function TodayAtAGlance({
   logs: ContextLog[];
 }) {
   const today = new Date().toLocaleDateString("en-CA");
-  const todayLogs = logs.filter((l) => l.date === today);
-  const completedCount = todayLogs.filter((l) => l.completed).length;
+  const displayDate = getMostRecentDate(logs, today);
+  const isToday = displayDate === today;
+  const displayLogs = logs.filter((l) => l.date === displayDate);
+  const completedCount = displayLogs.filter((l) => l.completed).length;
   const totalHabits = habits.length;
   const pct = totalHabits > 0 ? Math.round((completedCount / totalHabits) * 100) : 0;
-  const bestStreak = getLongestActiveStreak(habits, logs, today);
+  const bestStreak = getLongestActiveStreak(habits, logs, displayDate);
 
   return (
     <div>
       <h2 className="mb-4 text-sm font-semibold uppercase tracking-wide text-gray-500">
-        Today at a Glance
+        {isToday ? "Today at a Glance" : "Latest Activity"}
       </h2>
       <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
         {/* Progress */}
