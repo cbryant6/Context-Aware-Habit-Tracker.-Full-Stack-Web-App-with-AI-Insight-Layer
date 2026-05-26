@@ -72,8 +72,8 @@ export function CompletionRateChart({
             tickFormatter={(v) => `${v}%`}
           />
           <Tooltip
-            formatter={(value: number | null) =>
-              value === null ? ["No data", ""] : [`${value}%`, "Completion"]
+            formatter={(value) =>
+              value == null ? ["No data", ""] : [`${value}%`, "Completion"]
             }
             labelStyle={{ fontSize: 12, color: "#374151" }}
             contentStyle={{
