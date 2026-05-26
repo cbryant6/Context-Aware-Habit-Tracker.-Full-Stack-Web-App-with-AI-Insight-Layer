@@ -1,0 +1,43 @@
+# Habit Tracker
+
+## Stack
+- Next.js 14 (App Router), TypeScript, Tailwind CSS
+- Supabase for auth and database
+- Recharts for charts
+- Claude API via Anthropic SDK for AI insights
+- Deployed on Vercel
+
+## Database
+- `habits` table: id (uuid), user_id (uuid, references auth.users), name (text), frequency (text), category (text), archived (boolean), created_at (timestamptz)
+- `context_logs` table: id (uuid), user_id (uuid, references auth.users), habit_id (uuid, references habits), date (date), completed (boolean), sleep_score (integer 1-5), stress_score (integer 1-5), mood (text), schedule_disrupted (boolean), notes (text), created_at (timestamptz)
+- RLS enabled on both tables, all policies use `auth.uid() = user_id`
+- Migrations live in supabase/migrations/, run with `npx supabase db push`
+
+## Architecture
+- Supabase browser client: lib/supabase/client.ts
+- Supabase server client: lib/supabase/server.ts
+- Auth: email/password sign-up and sign-in, middleware.ts refreshes sessions
+- Auth callback: app/auth/callback/route.ts
+- Dashboard pages are server components that fetch data, then pass it to client components for interactivity
+- Types defined in lib/types.ts (Habit, ContextLog)
+
+## Current Status
+- Issue 1 complete: repo initialized, Supabase schema migration created, RLS policies defined, env setup done
+- Phase 1 in progress: auth, habits CRUD, today view with checklist still needed
+
+## Phase 2 Requirements
+- Context log entry form: when a user completes a habit, they can attach sleep_score (1-5), stress_score (1-5), mood (free text), schedule_disrupted (boolean), and notes
+- History view: browse past context_logs by date at /dashboard/history
+- Polish UI on core flows, handle edge cases (empty states, loading, errors)
+
+## Phase 3 Requirements (later)
+- AI insights page using Claude API via server actions
+- Completion rate charts with Recharts over last 30 days
+- Responsive layout, final deploy, README update
+
+## Conventions
+- Use server components by default, add "use client" only when needed for interactivity
+- All Supabase queries on the server side go through lib/supabase/server.ts
+- Client-side mutations use lib/supabase/client.ts and call router.refresh() after writes
+- Keep components in the components/ directory
+- No inline styles — use Tailwind utility classes
