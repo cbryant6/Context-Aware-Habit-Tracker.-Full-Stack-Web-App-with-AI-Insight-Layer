@@ -95,8 +95,8 @@ src/
 
 ```bash
 # Clone the repo
-git clone https://github.com/cbryant6/Context-Aware-Habit-Tracker.-Full-Stack-Web-App-with-AI-Insight-Layer.git
-cd Context-Aware-Habit-Tracker.-Full-Stack-Web-App-with-AI-Insight-Layer
+git clone https://github.com/GIX-Luyao/final-project-codebase-anuj-nk.git
+cd final-project-codebase-anuj-nk
 
 # Install dependencies
 npm install
