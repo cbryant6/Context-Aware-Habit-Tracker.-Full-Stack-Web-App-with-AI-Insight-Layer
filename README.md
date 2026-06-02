@@ -6,7 +6,7 @@ Built with Next.js 16, React 19, Supabase, and the Anthropic Claude API.
 
 ## Live Demo
 
-**https://context-aware-habit-tracker-full-stack-web-app-with-fq87i9oyv.vercel.app**
+**[https://final-project-codebase-anuj-nk.vercel.app](https://final-project-codebase-anuj-nk.vercel.app)**
 
 
 Click **"Try Demo"** on the login page to explore with a pre-seeded account (45 days of data across 6 habits).
