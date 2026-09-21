@@ -4,13 +4,6 @@ A full-stack habit tracking app that goes beyond simple checkboxes. Instead of j
 
 Built with Next.js 16, React 19, Supabase, and the Anthropic Claude API.
 
-## Live Demo
-
-**[https://final-project-codebase-anuj-nk.vercel.app](https://final-project-codebase-anuj-nk.vercel.app)**
-
-
-Click **"Try Demo"** on the login page to explore with a pre-seeded account (45 days of data across 6 habits).
-
 ## Key Features
 
 ### Context-Aware Logging
